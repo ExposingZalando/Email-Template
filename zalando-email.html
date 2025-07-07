@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Email Zalando Protest</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        textarea {
+            width: 100%;
+            height: 400px;
+            margin: 15px 0;
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+        button {
+            background: #e00;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #c00;
+        }
+    </style>
+</head>
+<body>
+    <h1>Email Zalando Protest</h1>
+    <p>Click the button below to open a pre-filled email draft with today's date:</p>
+    
+    <textarea id="emailBody">[date of sending]
+Dear Zalando officials,
+
+I write this letter in outrage & disillusionment with the bigotry, discrimination and abuse of power that have come to light in the recent months as Zalando's management cracks down on Palestine solidarity of its employee base and supports Israel's ongoing genocide in Palestine.
+
+Whether it's the offensive and racist statements by the management board, the witch hunts against pro-Palestine employees or the banning of Palestine solidarity symbols, I strongly condemn Zalando's fostering of a culture of fear and intimidation. I particularly condemn Zalando's antisemitic acts of repression as it promotes a dangerous narrative that equates Jewish identity with Israeli nationalism. The willful conflation of Judaism with Zionism only serves to endanger Jews throughout the world.
+
+I emphasize that "diversity, equity and inclusion" must not be reduced to a slogan that corporations use to boost sales to some demographics or for the Chief People Officer to include in their mission statement to embellish a management structure to investors. These are values that businesses have a responsibility to adopt in order to tackle the societal and political challenges facing minorities. I note the current atmosphere in Germany as a particularly relevant example, with the demonization & antagonizing of immigrants, muslims and other minorities.
+
+Given the information that has been outputted through the ExposingZalando channel, I lay the full responsibility of these transgressions on the Chief People Officer and demand the immediate following actions:
+
+1. An acknowledgement of the problem and a tangible commitment to its resolution by the management board.
+2. An immediate halt to any persecution of employees displaying Palestine solidarity symbols or engaging in pro-Palestine activism.
+3. A transparent process to fundamentally overhaul and dismantle the toxic, fear-based hierarchical culture that allows discrimination and repression to flourish.
+4. Reparations for those harmed—including reinstatement, compensation, and support for employees unjustly disciplined or dismissed because of their political beliefs or cultural expression.
+5. Accountability for those responsible—from the senior management to any managers or HR personnel whose actions have contributed to perpetuating this culture of fear and repression.
+
+Your company's moral integrity is on the line. If Zalando truly values respect, human rights, and dignity, it will listen, reflect, and act accordingly—to confront its complicity in perpetuating a racist and genocidal dynamic and to finally stand on the side of justice and human rights.
+
+Sincerely,
+On behalf of "ExposingZalando"</textarea>
+
+    <button onclick="sendEmail()">Open Email Draft</button>
+
+    <script>
+        function sendEmail() {
+            // Insert today's date
+            const today = new Date();
+            const dateString = today.toLocaleDateString('en-GB', { 
+                day: 'numeric', 
+                month: 'long', 
+                year: 'numeric' 
+            });
+            
+            // Get text and replace placeholder
+            const body = document.getElementById("emailBody").value
+                .replace("[date of sending]", dateString);
+            
+            // Encode for mailto link
+            const encodedBody = encodeURIComponent(body);
+            const recipients = "Astrid.Arndt@Zalando.de";
+            const cc = "Maggie.sloan@zalando.de,Rose.Reynolds@zalando.de,Zbigniew.Laskowski@zalando.pl,zalando-se-berlin-works-council@zalando.de";
+            const subject = "My objection to Zalando's repression of Palestine solidarity";
+            
+            // Open email client
+            window.location.href = `mailto:${recipients}?cc=${cc}&subject=${encodeURIComponent(subject)}&body=${encodedBody}`;
+        }
+    </script>
+</body>
+</html>
