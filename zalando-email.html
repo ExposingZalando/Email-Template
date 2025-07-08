@@ -79,7 +79,7 @@ On behalf of "ExposingZalando"</textarea>
             const subject = "My objection to Zalando's repression of Palestine solidarity";
             
             // Open email client
-            window.open(`mailto:${recipients}?cc=${cc}&subject=${encodeURIComponent(subject)}&body=${encodedBody}`, '_blank');
+            window.location.href = `mailto:${recipients}?cc=${cc}&subject=${encodeURIComponent(subject)}&body=${encodedBody}`;
         }
     </script>
 </body>
