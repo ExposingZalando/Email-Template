@@ -1,40 +1,125 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Email Zalando Protest</title>
     <style>
-        body { 
-            font-family: Arial, sans-serif;
-            padding: 20px;
-            max-width: 600px;
-            margin: 0 auto;
-            line-height: 1.6;
+        :root {
+            --primary: #e00;
+            --primary-dark: #c00;
+            --text: #333;
+            --light-gray: #f5f5f5;
+            --border: #ddd;
         }
+        
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background-color: #f9f9f9;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 700px;
+            width: 100%;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            margin: 30px 20px;
+            padding: 30px;
+        }
+        
+        h1 {
+            color: var(--primary);
+            margin-top: 0;
+            font-size: 28px;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 10px;
+        }
+        
+        .intro {
+            margin-bottom: 25px;
+            font-size: 16px;
+            color: #555;
+        }
+        
         textarea {
             width: 100%;
             height: 400px;
             margin: 15px 0;
-            padding: 10px;
-            border: 1px solid #ddd;
+            padding: 15px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 14px;
+            line-height: 1.5;
+            background: var(--light-gray);
+            resize: vertical;
+            transition: border 0.3s;
         }
+        
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(238, 0, 0, 0.1);
+        }
+        
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        
         button {
-            background: #e00;
+            background: var(--primary);
             color: white;
             border: none;
-            padding: 12px 25px;
+            padding: 12px 30px;
             font-size: 16px;
+            font-weight: 600;
             cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.3s;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
+        
         button:hover {
-            background: #c00;
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        .disclaimer {
+            margin-top: 25px;
+            font-size: 13px;
+            color: #777;
+            border-top: 1px solid var(--border);
+            padding-top: 15px;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+                margin: 15px 10px;
+            }
+            
+            h1 {
+                font-size: 24px;
+            }
         }
     </style>
 </head>
 <body>
-    <h1>Email Zalando Protest</h1>
-    <p>Click the button below to open a pre-filled email draft with today's date:</p>
-    
-    <textarea id="emailBody">[Date]
+    <div class="container">
+        <h1>Email Zalando Protest</h1>
+        <p class="intro">Click the button below to open a pre-filled email draft with today's date. The email will be copied to your clipboard and Gmail will open in a new tab.</p>
+        
+        <textarea id="emailBody">[Date]
 
 Dear Zalando officials,
 
@@ -56,8 +141,13 @@ Your company's moral integrity is on the line. If Zalando truly values respect, 
 
 Sincerely,
 On behalf of "ExposingZalando"</textarea>
-    
-    <button onclick="sendEmail()">Open Email Draft</button>
+        
+        <div class="button-container">
+            <button onclick="sendEmail()">Open Email Draft</button>
+        </div>
+        
+        <p class="disclaimer">Note: If the email doesn't open automatically, please copy the text above and paste it into your email client manually. Recipients: To: Astrid.Arndt@Zalando.de | Cc: Maggie.sloan@zalando.de, Rose.Reynolds@zalando.de, Zbigniew.Laskowski@zalando.pl, zalando-se-berlin-works-council@zalando.de</p>
+    </div>
 
     <script>
         function sendEmail() {
@@ -71,16 +161,27 @@ On behalf of "ExposingZalando"</textarea>
             
             // Get text and replace placeholder
             const body = document.getElementById("emailBody").value
-                .replace("[date of sending]", dateString);
+                .replace("[Date]", dateString);
             
-            // Encode for mailto link
-            const encodedBody = encodeURIComponent(body);
-            const recipients = "Astrid.Arndt@Zalando.de";
-            const cc = "Maggie.sloan@zalando.de,Rose.Reynolds@zalando.de,Zbigniew.Laskowski@zalando.pl,zalando-se-berlin-works-council@zalando.de";
-            const subject = "My objection to Zalando's repression of Palestine solidarity";
-            
-            // Open email client
-            window.location.href = `mailto:${recipients}?cc=${cc}&subject=${encodeURIComponent(subject)}&body=${encodedBody}`;
+            // Copy to clipboard
+            navigator.clipboard.writeText(body)
+                .then(() => {
+                    // Open Gmail in new tab
+                    window.open('https://mail.google.com/mail/u/0/?view=cm&fs=1&tf=1', '_blank');
+                    
+                    // Show success message
+                    alert("The email has been copied to your clipboard!\n\n" + 
+                          "1. A new Gmail tab has opened\n" +
+                          "2. Paste the text (Ctrl+V/Cmd+V)\n" +
+                          "3. Add recipients:\n" +
+                          "   To: Astrid.Arndt@Zalando.de\n" +
+                          "   Cc: Maggie.sloan@zalando.de, Rose.Reynolds@zalando.de, etc.");
+                })
+                .catch(err => {
+                    // Fallback if clipboard fails
+                    alert("Could not copy automatically. Please manually copy the text.");
+                    document.getElementById("emailBody").select();
+                });
         }
     </script>
 </body>
