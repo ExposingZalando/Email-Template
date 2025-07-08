@@ -111,13 +111,17 @@
             h1 {
                 font-size: 24px;
             }
+            
+            textarea {
+                height: 350px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Email Zalando Protest</h1>
-        <p class="intro">Click the button below to open a pre-filled email draft with today's date. The email will be copied to your clipboard and Gmail will open in a new tab.</p>
+        <p class="intro">Click the button below to open a pre-filled email draft with today's date.</p>
         
         <textarea id="emailBody">[Date]
 
@@ -146,7 +150,10 @@ On behalf of "ExposingZalando"</textarea>
             <button onclick="sendEmail()">Open Email Draft</button>
         </div>
         
-        <p class="disclaimer">Note: If the email doesn't open automatically, please copy the text above and paste it into your email client manually. Recipients: To: Astrid.Arndt@Zalando.de | Cc: Maggie.sloan@zalando.de, Rose.Reynolds@zalando.de, Zbigniew.Laskowski@zalando.pl, zalando-se-berlin-works-council@zalando.de</p>
+        <p class="disclaimer">If the email doesn't open automatically, please copy the text above and paste it into your email client manually.<br><br>
+        <strong>Recipients:</strong><br>
+        To: Astrid.Arndt@Zalando.de<br>
+        Cc: Maggie.sloan@zalando.de, Rose.Reynolds@zalando.de, Zbigniew.Laskowski@zalando.pl, zalando-se-berlin-works-council@zalando.de</p>
     </div>
 
     <script>
@@ -163,25 +170,31 @@ On behalf of "ExposingZalando"</textarea>
             const body = document.getElementById("emailBody").value
                 .replace("[Date]", dateString);
             
-            // Copy to clipboard
-            navigator.clipboard.writeText(body)
-                .then(() => {
-                    // Open Gmail in new tab
-                    window.open('https://mail.google.com/mail/u/0/?view=cm&fs=1&tf=1', '_blank');
-                    
-                    // Show success message
-                    alert("The email has been copied to your clipboard!\n\n" + 
-                          "1. A new Gmail tab has opened\n" +
-                          "2. Paste the text (Ctrl+V/Cmd+V)\n" +
-                          "3. Add recipients:\n" +
-                          "   To: Astrid.Arndt@Zalando.de\n" +
-                          "   Cc: Maggie.sloan@zalando.de, Rose.Reynolds@zalando.de, etc.");
-                })
-                .catch(err => {
-                    // Fallback if clipboard fails
-                    alert("Could not copy automatically. Please manually copy the text.");
-                    document.getElementById("emailBody").select();
-                });
+            // Encode for mailto link
+            const encodedBody = encodeURIComponent(body);
+            const recipients = "Astrid.Arndt@Zalando.de";
+            const cc = "Maggie.sloan@zalando.de,Rose.Reynolds@zalando.de,Zbigniew.Laskowski@zalando.pl,zalando-se-berlin-works-council@zalando.de";
+            const subject = "My objection to Zalando's repression of Palestine solidarity";
+            
+            // First try mailto: link (works on most mobile devices)
+            const mailtoLink = `mailto:${recipients}?cc=${cc}&subject=${encodeURIComponent(subject)}&body=${encodedBody}`;
+            
+            // Try to open mailto link
+            const mailtoWindow = window.open(mailtoLink, '_blank');
+            
+            // If mailto fails (window didn't open or was closed immediately)
+            setTimeout(() => {
+                if (!mailtoWindow || mailtoWindow.closed) {
+                    // Fallback: copy to clipboard and show instructions
+                    navigator.clipboard.writeText(body).then(() => {
+                        alert("Please paste this email into your email app:\n\n1. The text has been copied\n2. Open your email app\n3. Paste (tap & hold → Paste)");
+                    }).catch(() => {
+                        // Final fallback if clipboard fails too
+                        document.getElementById("emailBody").select();
+                        alert("Please copy the text manually and paste it into your email app.");
+                    });
+                }
+            }, 500);
         }
     </script>
 </body>
